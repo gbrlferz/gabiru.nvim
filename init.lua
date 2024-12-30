@@ -655,53 +655,6 @@ require('lazy').setup({
     end,
   },
 
-  -- CUSTOM
-
-  {
-    'QuickGD/quickgd.nvim',
-    ft = { 'gdshader', 'gdshaderinc' },
-    cmd = { 'GodotRun', 'GodotRunLast', 'GodotStart' },
-    -- Use opts if passing in settings else use config
-    init = function()
-      vim.filetype.add {
-        extension = {
-          gdshaderinc = 'gdshaderinc',
-        },
-      }
-    end,
-    opts = {
-      treesitter = true,
-      cmp = true,
-    }, -- remove config and use this if changing settings.
-  },
-
-  {
-    'pocco81/auto-save.nvim',
-  },
-
-  {
-    'wakatime/vim-wakatime',
-    lazy = false,
-  },
-
-  {
-    'windwp/nvim-autopairs',
-    config = function()
-      require('nvim-autopairs').setup {}
-    end,
-  },
-
-  {
-    'S1M0N38/love2d.nvim',
-    cmd = 'LoveRun',
-    opts = {},
-    keys = {
-      { '<leader>v', ft = 'lua', desc = 'LÖVE' },
-      { '<leader>vv', '<cmd>LoveRun<cr>', ft = 'lua', desc = 'Run LÖVE' },
-      { '<leader>vs', '<cmd>LoveStop<cr>', ft = 'lua', desc = 'Stop LÖVE' },
-    },
-  },
-
   {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v3.x',
@@ -1010,7 +963,8 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+{ import = 'custom.plugins' },
+
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
