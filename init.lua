@@ -4,8 +4,19 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.api.nvim_set_keymap(
+  'n',
+  '<F5>',
+  ':w<CR>:!g++ *.cpp -o game.exe -O1 -Wall -Wno-missing-braces -I include/ -L lib/ -lraylib -lopengl32 -lgdi32 -lwinmm -lstdc++ && game.exe<CR>',
+  { noremap = true, silent = true }
+)
+
+vim.opt.termguicolors = true
+
+vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -185,7 +196,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -230,7 +241,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       require('which-key').add {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -270,7 +281,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -378,7 +389,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -521,7 +532,13 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        -- clangd = {
+        --   settings = {
+        --     clangd = {
+        --       fallbackStyle = '{ BasedOnStyle: LLVM, ColumnLimit: 1000 }',
+        --     },
+        --   },
+        -- },
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -605,42 +622,42 @@ require('lazy').setup({
 
   {},
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_fallback = true }
-        end,
-        mode = '',
-        desc = '[F]ormat buffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      -- format_on_save = function(bufnr)
-      --   -- Disable "format_on_save lsp_fallback" for languages that don't
-      --   -- have a well standardized coding style. You can add additional
-      --   -- languages here or re-enable it for the disabled ones.
-      --   local disable_filetypes = { c = true, cpp = true }
-      --   return {
-      --     timeout_ms = 500,
-      --     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-      --   }
-      -- end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   event = { 'BufWritePre' },
+  --   cmd = { 'ConformInfo' },
+  --   keys = {
+  --     {
+  --       '<leader>f',
+  --       function()
+  --         require('conform').format { async = true, lsp_fallback = true }
+  --       end,
+  --       mode = '',
+  --       desc = '[F]ormat buffer',
+  --     },
+  --   },
+  --   opts = {
+  --     notify_on_error = false,
+  --     -- format_on_save = function(bufnr)
+  --     --   -- Disable "format_on_save lsp_fallback" for languages that don't
+  --     --   -- have a well standardized coding style. You can add additional
+  --     --   -- languages here or re-enable it for the disabled ones.
+  --     --   local disable_filetypes = { c = true, cpp = true }
+  --     --   return {
+  --     --     timeout_ms = 500,
+  --     --     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+  --     --   }
+  --     -- end,
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use 'stop_after_first' to run the first available formatter from the list
+  --       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -761,28 +778,42 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    opts = {
-      transparent = true,
-      styles = {
-        sidebars = 'transparent',
-        floats = 'transparent',
-      },
-    },
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'folke/tokyonight.nvim',
+  --   opts = {
+  --     transparent = true,
+  --     styles = {
+  --       sidebars = 'transparent',
+  --       floats = 'transparent',
+  --     },
+  --   },
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight-night'
 
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+  --     -- You can configure highlights by doing something like:
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
+
+  {
+    'sho-87/kanagawa-paper.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {},
+    init = function()
+      vim.cmd.colorscheme 'kanagawa-paper'
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
+      vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
     end,
   },
 
@@ -897,8 +928,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-{ import = 'custom.plugins' },
-
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
