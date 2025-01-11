@@ -4,12 +4,18 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Raylib compiler
 vim.api.nvim_set_keymap(
   'n',
   '<F5>',
   ':w<CR>:!g++ *.cpp -o game.exe -O1 -Wall -Wno-missing-braces -I include/ -L lib/ -lraylib -lopengl32 -lgdi32 -lwinmm -lstdc++ && game.exe<CR>',
   { noremap = true, silent = true }
 )
+
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
 
 vim.opt.termguicolors = true
 
@@ -551,6 +557,14 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
+        -- omnisharp = {
+        --   cmd = { "omnisharp", "--languageserver" },
+        --   settings = {
+        --     enableRoslynAnalyzers = true,
+        --     organizeImportsOnFormat = true,
+        --   },
+        -- },
+
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -802,21 +816,19 @@ require('lazy').setup({
   --     vim.cmd.hi 'Comment gui=none'
   --   end,
   -- },
-
   {
     'sho-87/kanagawa-paper.nvim',
     lazy = false,
     priority = 1000,
     opts = {},
-    init = function()
-      vim.cmd.colorscheme 'kanagawa-paper'
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })
+    config = function()
+      vim.cmd.colorscheme('kanagawa-paper')
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })    -- Capitalized group name
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Correct capitalization
+      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' }) -- Correct capitalization
+      vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })     -- Correct capitalization
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
