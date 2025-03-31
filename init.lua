@@ -1,25 +1,26 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Raylib compiler
-vim.api.nvim_set_keymap(
-  'n',
-  '<F5>',
-  ':w<CR>:!g++ *.cpp -o game.exe -O1 -Wall -Wno-missing-braces -I include/ -L lib/ -lraylib -lopengl32 -lgdi32 -lwinmm -lstdc++ && game.exe<CR>',
-  { noremap = true, silent = true }
-)
-
--- Toggle compiler results
-vim.api.nvim_set_keymap('n', '<S-F7>', "<cmd>CompilerToggleResults<cr>", { noremap = true, silent = true })
-
+-- Custom keybinds
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
+vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
+
+-- ~/.config/nvim/init.lua
+vim.opt.tabstop = 2      -- Number of spaces a TAB character displays as
+vim.opt.shiftwidth = 2   -- Number of spaces for indentation (e.g., `>>`, `<<`)
+vim.opt.softtabstop = 2  -- Number of spaces inserted when pressing <Tab>
+vim.opt.expandtab = true -- Convert TABs to spaces
 
 vim.opt.termguicolors = true
 
-vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
+vim.opt.shell = "pwsh"
+vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+vim.opt.shellquote = ""
+vim.opt.shellxquote = ""
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -32,8 +33,6 @@ vim.g.have_nerd_font = true
 -- Make line numbers default
 vim.opt.number = true
 vim.opt.relativenumber = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -538,13 +537,15 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {
-        --   settings = {
-        --     clangd = {
-        --       fallbackStyle = '{ BasedOnStyle: LLVM, ColumnLimit: 1000 }',
-        --     },
-        --   },
-        -- },
+        clangd = {
+          cmd = {
+            "clangd",
+            "--query-driver=C:\\msys64\\mingw64\\bin\\g++.exe", -- Path to your MinGW g++
+            "--background-index",
+            "--clang-tidy",
+          }
+        },
+
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -609,6 +610,7 @@ require('lazy').setup({
           end,
         },
       }
+
       local gdscript_config = {
         capabilities = capabilities,
         settings = {},
@@ -792,30 +794,6 @@ require('lazy').setup({
     end,
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   opts = {
-  --     transparent = true,
-  --     styles = {
-  --       sidebars = 'transparent',
-  --       floats = 'transparent',
-  --     },
-  --   },
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-night'
-
-  --     -- You can configure highlights by doing something like:
-  --     vim.cmd.hi 'Comment gui=none'
-  --   end,
-  -- },
   {
     'sho-87/kanagawa-paper.nvim',
     lazy = false,
@@ -823,10 +801,10 @@ require('lazy').setup({
     opts = {},
     config = function()
       vim.cmd.colorscheme('kanagawa-paper')
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })    -- Capitalized group name
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Correct capitalization
-      vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' }) -- Correct capitalization
-      vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })     -- Correct capitalization
+      -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })      -- Capitalized group name
+      -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Correct capitalization
+      -- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' }) -- Correct capitalization
+      -- vim.api.nvim_set_hl(0, 'Pmenu', { bg = 'none' })       -- Correct capitalization
     end,
   },
   -- Highlight todo, notes, etc in comments
