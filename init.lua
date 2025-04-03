@@ -2,25 +2,32 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Custom keybinds
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
 
 -- ~/.config/nvim/init.lua
-vim.opt.tabstop = 2      -- Number of spaces a TAB character displays as
-vim.opt.shiftwidth = 2   -- Number of spaces for indentation (e.g., `>>`, `<<`)
-vim.opt.softtabstop = 2  -- Number of spaces inserted when pressing <Tab>
+vim.opt.tabstop = 2 -- Number of spaces a TAB character displays as
+vim.opt.shiftwidth = 2 -- Number of spaces for indentation (e.g., `>>`, `<<`)
+vim.opt.softtabstop = 2 -- Number of spaces inserted when pressing <Tab>
 vim.opt.expandtab = true -- Convert TABs to spaces
 
 vim.opt.termguicolors = true
 
-vim.opt.shell = "pwsh"
-vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
-vim.opt.shellquote = ""
-vim.opt.shellxquote = ""
+if vim.loop.os_uname().sysname == 'Windows_NT' then
+  -- Windows-specific settings
+  vim.opt.shell = 'pwsh'
+  vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+  vim.opt.shellquote = ''
+  vim.opt.shellxquote = ''
+else
+  -- Unix/Linux defaults (auto-detected)
+  -- Optionally set to bash explicitly:
+  -- vim.opt.shell = "bash"
+end
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -115,10 +122,11 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -201,7 +209,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -246,7 +254,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       require('which-key').add {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -286,7 +294,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -394,7 +402,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -539,11 +547,11 @@ require('lazy').setup({
       local servers = {
         clangd = {
           cmd = {
-            "clangd",
-            "--query-driver=C:\\msys64\\mingw64\\bin\\g++.exe", -- Path to your MinGW g++
-            "--background-index",
-            "--clang-tidy",
-          }
+            'clangd',
+            '--query-driver=C:\\msys64\\mingw64\\bin\\g++.exe', -- Path to your MinGW g++
+            '--background-index',
+            '--clang-tidy',
+          },
         },
 
         -- gopls = {},
@@ -638,42 +646,42 @@ require('lazy').setup({
 
   {},
 
-  -- { -- Autoformat
-  --   'stevearc/conform.nvim',
-  --   event = { 'BufWritePre' },
-  --   cmd = { 'ConformInfo' },
-  --   keys = {
-  --     {
-  --       '<leader>f',
-  --       function()
-  --         require('conform').format { async = true, lsp_fallback = true }
-  --       end,
-  --       mode = '',
-  --       desc = '[F]ormat buffer',
-  --     },
-  --   },
-  --   opts = {
-  --     notify_on_error = false,
-  --     -- format_on_save = function(bufnr)
-  --     --   -- Disable "format_on_save lsp_fallback" for languages that don't
-  --     --   -- have a well standardized coding style. You can add additional
-  --     --   -- languages here or re-enable it for the disabled ones.
-  --     --   local disable_filetypes = { c = true, cpp = true }
-  --     --   return {
-  --     --     timeout_ms = 500,
-  --     --     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-  --     --   }
-  --     -- end,
-  --     formatters_by_ft = {
-  --       lua = { 'stylua' },
-  --       -- Conform can also run multiple formatters sequentially
-  --       -- python = { "isort", "black" },
-  --       --
-  --       -- You can use 'stop_after_first' to run the first available formatter from the list
-  --       -- javascript = { "prettierd", "prettier", stop_after_first = true },
-  --     },
-  --   },
-  -- },
+  { -- Autoformat
+    'stevearc/conform.nvim',
+    event = { 'BufWritePre' },
+    cmd = { 'ConformInfo' },
+    keys = {
+      {
+        '<leader>f',
+        function()
+          require('conform').format { async = true, lsp_fallback = true }
+        end,
+        mode = '',
+        desc = '[F]ormat buffer',
+      },
+    },
+    opts = {
+      notify_on_error = false,
+      format_on_save = function(bufnr)
+        -- Disable "format_on_save lsp_fallback" for languages that don't
+        -- have a well standardized coding style. You can add additional
+        -- languages here or re-enable it for the disabled ones.
+        local disable_filetypes = { c = true, cpp = true }
+        return {
+          timeout_ms = 500,
+          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+        }
+      end,
+      formatters_by_ft = {
+        lua = { 'stylua' },
+        -- Conform can also run multiple formatters sequentially
+        -- python = { "isort", "black" },
+        --
+        -- You can use 'stop_after_first' to run the first available formatter from the list
+        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+    },
+  },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -800,7 +808,7 @@ require('lazy').setup({
     priority = 1000,
     opts = {},
     config = function()
-      vim.cmd.colorscheme('kanagawa-paper')
+      vim.cmd.colorscheme 'kanagawa-paper'
       -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })      -- Capitalized group name
       -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' }) -- Correct capitalization
       -- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'none' }) -- Correct capitalization
