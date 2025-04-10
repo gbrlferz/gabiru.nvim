@@ -13,9 +13,9 @@ vim.keymap.set('n', '<leader>zt', '<cmd>!zig test %<CR>', { desc = '[Z]ig [T]est
 vim.keymap.set('n', '<leader>zr', '<cmd>!zig run %<CR>', { desc = '[Z]ig [R]un' })
 
 -- ~/.config/nvim/init.lua
-vim.opt.tabstop = 2      -- Number of spaces a TAB character displays as
-vim.opt.shiftwidth = 2   -- Number of spaces for indentation (e.g., `>>`, `<<`)
-vim.opt.softtabstop = 2  -- Number of spaces inserted when pressing <Tab>
+vim.opt.tabstop = 2 -- Number of spaces a TAB character displays as
+vim.opt.shiftwidth = 2 -- Number of spaces for indentation (e.g., `>>`, `<<`)
+vim.opt.softtabstop = 2 -- Number of spaces inserted when pressing <Tab>
 vim.opt.expandtab = true -- Convert TABs to spaces
 
 vim.opt.termguicolors = true
@@ -158,7 +158,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Prepare LSP configuration plugins conditionally:
 local lsp_config = {}
-if vim.loop.os_uname().sysname == "Windows_NT" then
+if vim.loop.os_uname().sysname == 'Windows_NT' then
   -- On Windows: use Mason with nvim-lspconfig
   lsp_config = {
     'neovim/nvim-lspconfig',
@@ -169,9 +169,16 @@ if vim.loop.os_uname().sysname == "Windows_NT" then
       { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      {
+        'nvim-telescope/telescope.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function()
+          require('telescope').setup {}
+        end,
+      },
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -351,22 +358,22 @@ if vim.loop.os_uname().sysname == "Windows_NT" then
 else
   -- On non-Windows (NixOS etc.): use Lazy-LSP
   lsp_config = {
-    "dundalek/lazy-lsp.nvim",
+    'dundalek/lazy-lsp.nvim',
     dependencies = {
-      "neovim/nvim-lspconfig",
-      { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/nvim-cmp",
+      'neovim/nvim-lspconfig',
+      { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/nvim-cmp',
     },
     config = function()
-      local lsp_zero = require("lsp-zero")
+      local lsp_zero = require 'lsp-zero'
       lsp_zero.on_attach(function(client, bufnr)
-        lsp_zero.default_keymaps({
+        lsp_zero.default_keymaps {
           buffer = bufnr,
-          preserve_mappings = false
-        })
+          preserve_mappings = false,
+        }
       end)
-      require("lazy-lsp").setup {}
+      require('lazy-lsp').setup {}
     end,
   }
 end
@@ -386,7 +393,7 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
-  {                   -- Git related signs and utilities
+  { -- Git related signs and utilities
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
@@ -399,7 +406,7 @@ require('lazy').setup({
     },
   },
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function()
@@ -442,7 +449,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       require('which-key').add {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -579,13 +586,13 @@ require('lazy').setup({
   },
 
   { -- Gruvbox color scheme
-    "ellisonleao/gruvbox.nvim",
+    'ellisonleao/gruvbox.nvim',
     lazy = false,
     priority = 1000,
     opts = {},
     config = function()
-      vim.o.background = "dark" -- or "light" for light mode
-      vim.cmd([[colorscheme gruvbox]])
+      vim.o.background = 'dark' -- or "light" for light mode
+      vim.cmd [[colorscheme gruvbox]]
     end,
   },
 
