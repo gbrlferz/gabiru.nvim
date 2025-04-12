@@ -6,11 +6,15 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
-vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
 vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
+
+-- Zig?
 vim.keymap.set('n', '<leader>zb', '<cmd>!zig build<CR>', { desc = '[Z]ig [B]uild' })
 vim.keymap.set('n', '<leader>zt', '<cmd>!zig test %<CR>', { desc = '[Z]ig [T]est file' })
 vim.keymap.set('n', '<leader>zr', '<cmd>!zig run %<CR>', { desc = '[Z]ig [R]un' })
+
+-- vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<F5>', ':!odin run .<CR>', { noremap = true, silent = true })
 
 -- ~/.config/nvim/init.lua
 vim.opt.tabstop = 2 -- Number of spaces a TAB character displays as
