@@ -1,5 +1,10 @@
 return {
   {
+    'habamax/vim-godot',
+    event = 'VimEnter',
+  },
+
+  {
     'QuickGD/quickgd.nvim',
     ft = { 'gdshader', 'gdshaderinc' },
     cmd = { 'GodotRun', 'GodotRunLast', 'GodotStart' },
@@ -16,5 +21,4 @@ return {
       cmp = true,
     },
   },
-
 }

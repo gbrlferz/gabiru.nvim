@@ -156,6 +156,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+local gdproject = io.open(vim.fn.getcwd() .. '/project.godot', 'r')
+if gdproject then
+  io.close(gdproject)
+  local socket_path = vim.fn.has 'win32' == 1 and [[\\.\pipe\godothost-]] .. os.getenv 'USERNAME' or vim.fn.stdpath 'run' .. '/godothost.sock'
+  vim.fn.serverstart(socket_path)
+end
 -- Prepare LSP configuration plugins conditionally:
 local lsp_config = {}
 if vim.loop.os_uname().sysname == 'Windows_NT' then
@@ -321,6 +327,8 @@ if vim.loop.os_uname().sysname == 'Windows_NT' then
 
       -- LSP capabilities
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      require('lspconfig').gdscript.setup(capabilities)
 
       -- Enable the following language servers. Feel free to add/remove any LSPs.
       local servers = {
@@ -639,7 +647,7 @@ require('lazy').setup({
         enable = true,
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'gdscript', 'gdshader' } },
     },
   },
 
