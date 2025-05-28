@@ -1,6 +1,3 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
 -- Custom keybinds
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
@@ -8,21 +5,19 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('v', '<Leader>f', vim.lsp.buf.format)
 
--- Zig?
-vim.keymap.set('n', '<leader>zb', '<cmd>!zig build<CR>', { desc = '[Z]ig [B]uild' })
-vim.keymap.set('n', '<leader>zt', '<cmd>!zig test %<CR>', { desc = '[Z]ig [T]est file' })
-vim.keymap.set('n', '<leader>zr', '<cmd>!zig run %<CR>', { desc = '[Z]ig [R]un' })
+vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
 
--- vim.keymap.set('n', '<F5>', ':make<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<F5>', ':!odin run .<CR>', { noremap = true, silent = true })
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.g.have_nerd_font = true
 
--- ~/.config/nvim/init.lua
 vim.opt.tabstop = 2 -- Number of spaces a TAB character displays as
 vim.opt.shiftwidth = 2 -- Number of spaces for indentation (e.g., `>>`, `<<`)
 vim.opt.softtabstop = 2 -- Number of spaces inserted when pressing <Tab>
 vim.opt.expandtab = true -- Convert TABs to spaces
-
 vim.opt.termguicolors = true
+vim.opt.number = true
+vim.opt.relativenumber = true
 
 if vim.loop.os_uname().sysname == 'Windows_NT' then
   -- Windows-specific settings
@@ -30,16 +25,7 @@ if vim.loop.os_uname().sysname == 'Windows_NT' then
   vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
   vim.opt.shellquote = ''
   vim.opt.shellxquote = ''
-else
-  -- Unix/Linux defaults (auto-detected)
-  -- Optionally set to bash explicitly:
-  -- vim.opt.shell = "bash"
 end
-
-vim.g.have_nerd_font = true
-
-vim.opt.number = true
-vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
