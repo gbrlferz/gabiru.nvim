@@ -154,15 +154,8 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- Stop Neovim from wrapping commands in quotes that conflict with pwsh.exe. (The Fix)
-vim.opt.shellxquote = ''
-
 -- Set the shell
-vim.opt.shell = 'pwsh.exe'
--- Set the command flags
-vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy Bypass -Command'
--- Set the redirection
-vim.opt.shellredir = '>%s 2>&1'
+vim.opt.shell = 'fish'
 
 -- ODIN
 vim.api.nvim_create_autocmd('FileType', {
