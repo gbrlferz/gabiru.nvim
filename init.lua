@@ -1,45 +1,13 @@
 --[[
 
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
+  If you don't know anything about Lua, I recommend taking some time to read through
+  a guide. One possible example which will only take 10-15 minutes:
+    - https://learnxinyminutes.com/docs/lua/
 
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
+  After understanding a bit more about Lua, you can use `:help lua-guide` as a
+  reference for how Neovim integrates Lua.
+  - :help lua-guide
+  - (or HTML version): https://neovim.io/doc/user/lua-guide.html
 
 Kickstart Guide:
 
@@ -700,7 +668,6 @@ require('lazy').setup({
           -- capabilities = {},
           settings = {
             Lua = {
-              diagnostics = { globals = 'love' },
               completion = {
                 callSnippet = 'Replace',
               },
@@ -744,17 +711,6 @@ require('lazy').setup({
           end,
         },
       }
-
-      -- Define the GDScript configuration
-      vim.lsp.config('gdscript', {
-        capabilities = capabilities,
-        settings = {},
-        -- Your Windows-specific command can be included directly
-        cmd = vim.fn.has 'win32' == 1 and { 'ncat', 'localhost', os.getenv 'GDScript_Port' or '6005' } or nil,
-      })
-
-      -- Enable the configuration
-      vim.lsp.enable 'gdscript'
     end,
   },
 
@@ -904,6 +860,7 @@ require('lazy').setup({
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('gruvbox').setup {
+        transparent_mode = true,
         styles = {
           comments = { italic = false }, -- Disable italics in comments
         },
@@ -957,6 +914,11 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+
+    dependencies = {
+      'windwp/nvim-ts-autotag',
+    },
+
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
@@ -969,6 +931,9 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      autotag = {
+        enable = true,
+      },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1028,15 +993,3 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
--- Enable neovim to be the external editor for Godot, if the cwd has a project.godot file
-if vim.fn.filereadable(vim.fn.getcwd() .. '/project.godot') == 1 then
-  local addr = './godot.pipe'
-  if vim.fn.has 'win32' == 1 then
-    -- Windows can't pipe so use localhost. Make sure this is configured in Godot
-    -- Exec Path: nvim
-    -- Exec Flags: --server 127.0.0.1:6004 --remote-send "<esc>:n {file}<CR>:call cursor({line},{col})<CR>"
-    addr = '127.0.0.1:6004'
-  end
-  vim.fn.serverstart(addr)
-end
