@@ -68,7 +68,10 @@ vim.o.expandtab = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Set the shell
-vim.opt.shell = 'fish'
+vim.opt.shell = 'powershell'
+vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+vim.opt.shellquote = ''
+vim.opt.shellxquote = ''
 
 -- ODIN
 vim.api.nvim_create_autocmd('FileType', {
@@ -712,7 +715,7 @@ require('lazy').setup({
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+          if vim.fn.executable 'make' == 0 then
             return
           end
           return 'make install_jsregexp'
@@ -799,17 +802,15 @@ require('lazy').setup({
   },
 
   {
-    'ellisonleao/gruvbox.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    'rebelot/kanagawa.nvim',
+    priority = 1000, -- Ensure it loads first
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('gruvbox').setup {
-        transparent_mode = true,
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
+      require('kanagawa').setup {
+        commentStyle = { italic = true },
+        keywordStyle = { italic = true },
+        transparent = true, -- Set to true if you want a transparent background
       }
-      vim.cmd.colorscheme 'gruvbox'
+      vim.cmd.colorscheme 'kanagawa-dragon'
     end,
   },
 
